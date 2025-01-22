@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Will You Be My Valentine?</title>
+
+  <!-- Fonts (example) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link 
+    href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" 
+    rel="stylesheet"
+  />
+
+  <!-- Styles -->
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <main class="valentine-container">
+    <!-- Hero Section -->
+    <section class="hero">
+      <h1>Will you be my Valentine?</h1>
+      <p class="subtitle">A little page, just for you, asking a big question.</p>
+    </section>
+
+    <!-- Photo & Message Section -->
+    <section class="content">
+      <div class="photos">
+        <!-- Replace with your own images! -->
+        <div class="photo-frame">
+          <img src="https://via.placeholder.com/300x300.png?text=Our+Memory+1" alt="Memory 1">
+        </div>
+        <div class="photo-frame">
+          <img src="https://via.placeholder.com/300x300.png?text=Our+Memory+2" alt="Memory 2">
+        </div>
+        <div class="photo-frame">
+          <img src="https://via.placeholder.com/300x300.png?text=Our+Memory+3" alt="Memory 3">
+        </div>
+      </div>
+      <div class="message">
+        <p>
+          Ever since I met you, my days have been brighter and my heart happier. 
+          I cherish every laugh, every adventure, and every quiet moment we share. 
+          You mean the world to me.
+        </p>
+        <p>
+          So, on this special occasion, I want to ask you:
+        </p>
+      </div>
+    </section>
+
+    <!-- Interactive Button -->
+    <section class="action">
+      <button class="yes-button" id="yesButton">Yes!</button>
+    </section>
+
+    <!-- Hidden Surprise Message (reveals after click) -->
+    <section class="surprise" id="surpriseMessage">
+      <h2>Yay! You said "Yes!"</h2>
+      <p>I'm over the moon. Can't wait to celebrate our love together! ❤️</p>
+    </section>
+  </main>
+
+  <!-- Confetti / Hearts Canvas -->
+  <canvas id="confettiCanvas"></canvas>
+
+  <!-- Scripts -->
+  <script src="script.js"></script>
+</body>
+</html>
+f
