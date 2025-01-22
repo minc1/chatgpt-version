@@ -1,109 +1,92 @@
-// Grab elements
 const yesButton = document.getElementById('yesButton');
-const surpriseMessage = document.getElementById('surpriseMessage');
-const confettiCanvas = document.getElementById('confettiCanvas');
+const confettiWrapper = document.getElementById('confettiWrapper');
 
-// Initialize Canvas for Confetti / Hearts
-const ctx = confettiCanvas.getContext('2d');
-let particles = [];
-let animationId;
-let isAnimating = false;
-
-// Particle constructor
-class Particle {
-  constructor(x, y, size, color, shape) {
-    this.x = x;
-    this.y = y;
-    this.size = size;
-    this.color = color;
-    this.shape = shape;
-    this.speedY = Math.random() * 2 + 2;
-    this.speedX = (Math.random() - 0.5) * 3;
-  }
-  update() {
-    this.y += this.speedY;
-    this.x += this.speedX;
-    // Gravity-ish
-    if (this.y > confettiCanvas.height) {
-      this.y = 0 - this.size;
-      this.x = Math.random() * confettiCanvas.width;
-    }
-  }
-  draw() {
-    ctx.fillStyle = this.color;
-    if (this.shape === 'circle') {
-      ctx.beginPath();
-      ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
-      ctx.fill();
-    } else if (this.shape === 'heart') {
-      drawHeart(this.x, this.y, this.size);
-    }
-  }
-}
-
-// Heart shape function
-function drawHeart(x, y, size) {
-  ctx.save();
-  ctx.translate(x, y);
-  ctx.rotate(Math.PI / 4);
-  ctx.fillRect(-size / 2, -size / 2, size, size);
-  ctx.beginPath();
-  ctx.arc(-size / 2, 0, size / 2, Math.PI / 2, 3 * Math.PI / 2);
-  ctx.arc(size / 2, 0, size / 2, 3 * Math.PI / 2, Math.PI / 2);
-  ctx.fill();
-  ctx.restore();
-}
-
-// Generate confetti/hearts
-function initParticles() {
-  particles = [];
-  const numberOfParticles = 100;
-  for (let i = 0; i < numberOfParticles; i++) {
-    const size = Math.random() * 8 + 5;
-    const x = Math.random() * confettiCanvas.width;
-    const y = Math.random() * confettiCanvas.height;
-    const colors = ['#D81159', '#FF6F61', '#FFC0CB', '#FFA5B5', '#FFFFFF'];
-    const color = colors[Math.floor(Math.random() * colors.length)];
-    // Randomly pick shape
-    const shape = Math.random() < 0.5 ? 'circle' : 'heart';
-    particles.push(new Particle(x, y, size, color, shape));
-  }
-}
-
-// Animate
-function animate() {
-  ctx.clearRect(0, 0, confettiCanvas.width, confettiCanvas.height);
-  particles.forEach((p) => {
-    p.update();
-    p.draw();
-  });
-  animationId = requestAnimationFrame(animate);
-}
-
-// Handle resize
-function resizeCanvas() {
-  confettiCanvas.width = window.innerWidth;
-  confettiCanvas.height = window.innerHeight;
-}
-window.addEventListener('resize', () => {
-  resizeCanvas();
-  if (isAnimating) {
-    cancelAnimationFrame(animationId);
-    initParticles();
-    animate();
-  }
-});
-
-// Show surprise message & start confetti
+// When the "Yes! 🎉" button is clicked
 yesButton.addEventListener('click', () => {
-  surpriseMessage.style.display = 'block';
-  confettiCanvas.style.display = 'block';
+  // Release floating hearts
+  releaseHearts(30);
 
-  // Prepare confetti
-  resizeCanvas();
-  initParticles();
-  if (!isAnimating) {
-    animate();
-    isAnimating = true;
-  }
+  // Play a celebratory sound (optional)
+  playSound();
+
+  // Show a fun message after a slight delay
+  setTimeout(() => {
+    showModal();
+  }, 1000);
 });
+
+/**
+ * Create and animate multiple heart elements.
+ * @param {number} count Number of hearts to release.
+ */
+function releaseHearts(count) {
+  for (let i = 0; i < count; i++) {
+    const heart = document.createElement('div');
+    heart.classList.add('heart');
+    
+    // Random sizing and position
+    const size = Math.floor(Math.random() * 20) + 20; // 20px to 40px
+    const left = Math.random() * 100; // 0% to 100% (viewport width)
+    const duration = Math.random() * 3 + 2; // 2 to 5 seconds
+    const delay = Math.random() * 0.5; // 0s to 0.5s
+
+    heart.style.width = `${size}px`;
+    heart.style.height = `${size}px`;
+    heart.style.left = `${left}%`;
+    heart.style.animationDuration = `${duration}s`;
+    heart.style.animationDelay = `${delay}s`;
+
+    // Add the heart to the page
+    confettiWrapper.appendChild(heart);
+
+    // Remove heart after animation ends
+    heart.addEventListener('animationend', () => {
+      heart.remove();
+    });
+  }
+}
+
+/**
+ * Optional: Play a celebratory sound when button is clicked.
+ */
+function playSound() {
+  const audio = new Audio('sounds/celebration.mp3'); // Ensure you have this audio file in a 'sounds' folder
+  audio.play();
+}
+
+/**
+ * Show a custom modal instead of a default alert.
+ */
+function showModal() {
+  // Create modal elements
+  const modalOverlay = document.createElement('div');
+  modalOverlay.classList.add('modal-overlay');
+
+  const modal = document.createElement('div');
+  modal.classList.add('modal');
+
+  const modalMessage = document.createElement('p');
+  modalMessage.innerHTML = "Yay! You said YES! 🥰<br>Happy Valentine’s Day, my love! 💖";
+
+  const closeButton = document.createElement('button');
+  closeButton.innerText = "Close 🌹";
+  closeButton.classList.add('close-button');
+
+  // Append elements
+  modal.appendChild(modalMessage);
+  modal.appendChild(closeButton);
+  modalOverlay.appendChild(modal);
+  document.body.appendChild(modalOverlay);
+
+  // Close modal on button click
+  closeButton.addEventListener('click', () => {
+    document.body.removeChild(modalOverlay);
+  });
+
+  // Optional: Close modal when clicking outside the modal content
+  modalOverlay.addEventListener('click', (e) => {
+    if (e.target === modalOverlay) {
+      document.body.removeChild(modalOverlay);
+    }
+  });
+}
